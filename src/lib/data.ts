@@ -30,9 +30,9 @@ outer: for (let round = 0; round < 3; round++)
     for (const n of names) {
       if (id > 100) break outer;
       const isAlarm = alarmBrands.includes(brand) || n.includes("Alarm");
-      const type = isAlarm ? (n.match(/Wireless|Ricochet|Hub|Agility|Smart/) ? "Wireless Alarm" : "Alarm") : types[(id + round) % 4];
-      const ch = [4, 8, 16, 32][(id + round) % 4];
-      systems.push({ id, brand, name: round ? `${n} ${["Kit", "Bundle"][round - 1]} ${ch}` : n, type, res: isAlarm ? "Grade 2" : ["4MP", "5MP", "8MP 4K", "12MP"][(id * 3) % 4], channels: ch, price: Math.round(290 + ((id * 137) % 1900)), rating: +(4 + ((id * 7) % 10) / 10).toFixed(1) });
+      const type = isAlarm ? (n.match(/Wireless|Ricochet|Hub|Agility|Smart/) ? "Wireless Alarm" : "Alarm") : types[(id + round) % 4]!;
+      const ch = [4, 8, 16, 32][(id + round) % 4]!;
+      systems.push({ id, brand, name: round ? `${n} ${["Kit", "Bundle"][round - 1]!} ${ch}` : n, type, res: isAlarm ? "Grade 2" : ["4MP", "5MP", "8MP 4K", "12MP"][(id * 3) % 4]!, channels: ch, price: Math.round(290 + ((id * 137) % 1900)), rating: +(4 + ((id * 7) % 10) / 10).toFixed(1) });
       id++;
     }
 
