@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CatalogueRouteImport } from './routes/catalogue'
+import { Route as ChatRouteImport } from './routes/chat'
+import { Route as CustomerRouteImport } from './routes/customer'
+import { Route as InstallerRouteImport } from './routes/installer'
+import { Route as SurveyRouteImport } from './routes/survey'
+import { Route as InstallersIdRouteImport } from './routes/installers/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CatalogueRoute = CatalogueRouteImport.update({
+  id: '/catalogue',
+  path: '/catalogue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomerRoute = CustomerRouteImport.update({
+  id: '/customer',
+  path: '/customer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstallerRoute = InstallerRouteImport.update({
+  id: '/installer',
+  path: '/installer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SurveyRoute = SurveyRouteImport.update({
+  id: '/survey',
+  path: '/survey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstallersIdRoute = InstallersIdRouteImport.update({
+  id: '/installers/$id',
+  path: '/installers/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/catalogue': typeof CatalogueRoute
+  '/chat': typeof ChatRoute
+  '/customer': typeof CustomerRoute
+  '/installer': typeof InstallerRoute
+  '/survey': typeof SurveyRoute
+  '/installers/$id': typeof InstallersIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/catalogue': typeof CatalogueRoute
+  '/chat': typeof ChatRoute
+  '/customer': typeof CustomerRoute
+  '/installer': typeof InstallerRoute
+  '/survey': typeof SurveyRoute
+  '/installers/$id': typeof InstallersIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/catalogue': typeof CatalogueRoute
+  '/chat': typeof ChatRoute
+  '/customer': typeof CustomerRoute
+  '/installer': typeof InstallerRoute
+  '/survey': typeof SurveyRoute
+  '/installers/$id': typeof InstallersIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/catalogue'
+    | '/chat'
+    | '/customer'
+    | '/installer'
+    | '/survey'
+    | '/installers/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/catalogue'
+    | '/chat'
+    | '/customer'
+    | '/installer'
+    | '/survey'
+    | '/installers/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/catalogue'
+    | '/chat'
+    | '/customer'
+    | '/installer'
+    | '/survey'
+    | '/installers/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CatalogueRoute: typeof CatalogueRoute
+  ChatRoute: typeof ChatRoute
+  CustomerRoute: typeof CustomerRoute
+  InstallerRoute: typeof InstallerRoute
+  SurveyRoute: typeof SurveyRoute
+  InstallersIdRoute: typeof InstallersIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/catalogue': {
+      id: '/catalogue'
+      path: '/catalogue'
+      fullPath: '/catalogue'
+      preLoaderRoute: typeof CatalogueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customer': {
+      id: '/customer'
+      path: '/customer'
+      fullPath: '/customer'
+      preLoaderRoute: typeof CustomerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/installer': {
+      id: '/installer'
+      path: '/installer'
+      fullPath: '/installer'
+      preLoaderRoute: typeof InstallerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/survey': {
+      id: '/survey'
+      path: '/survey'
+      fullPath: '/survey'
+      preLoaderRoute: typeof SurveyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/installers/$id': {
+      id: '/installers/$id'
+      path: '/installers/$id'
+      fullPath: '/installers/$id'
+      preLoaderRoute: typeof InstallersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CatalogueRoute: CatalogueRoute,
+  ChatRoute: ChatRoute,
+  CustomerRoute: CustomerRoute,
+  InstallerRoute: InstallerRoute,
+  SurveyRoute: SurveyRoute,
+  InstallersIdRoute: InstallersIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
