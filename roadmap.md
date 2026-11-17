@@ -5,4 +5,5 @@
 - [x] Customer dashboard (quotes, jobs, chat)
 - [x] Installer dashboard + Checkatrade-style profile
 - [x] Chat + WhatsApp tap-to-chat
-- [ ] Next: real logins/database (Cloud), real AI photo analysis
+- [x] Real AI photo analysis in survey
+- [ ] Next: real logins/database (Cloud), saving surveys and quotes

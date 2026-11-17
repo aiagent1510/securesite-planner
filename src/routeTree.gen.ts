@@ -15,6 +15,7 @@ import { Route as ChatRouteImport } from './routes/chat'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as InstallerRouteImport } from './routes/installer'
 import { Route as SurveyRouteImport } from './routes/survey'
+import { Route as ApiSurveyAnalyseRouteImport } from './routes/api/survey-analyse'
 import { Route as InstallersIdRouteImport } from './routes/installers/$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -47,6 +48,11 @@ const SurveyRoute = SurveyRouteImport.update({
   path: '/survey',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSurveyAnalyseRoute = ApiSurveyAnalyseRouteImport.update({
+  id: '/api/survey-analyse',
+  path: '/api/survey-analyse',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InstallersIdRoute = InstallersIdRouteImport.update({
   id: '/installers/$id',
   path: '/installers/$id',
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/customer': typeof CustomerRoute
   '/installer': typeof InstallerRoute
   '/survey': typeof SurveyRoute
+  '/api/survey-analyse': typeof ApiSurveyAnalyseRoute
   '/installers/$id': typeof InstallersIdRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/customer': typeof CustomerRoute
   '/installer': typeof InstallerRoute
   '/survey': typeof SurveyRoute
+  '/api/survey-analyse': typeof ApiSurveyAnalyseRoute
   '/installers/$id': typeof InstallersIdRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/customer': typeof CustomerRoute
   '/installer': typeof InstallerRoute
   '/survey': typeof SurveyRoute
+  '/api/survey-analyse': typeof ApiSurveyAnalyseRoute
   '/installers/$id': typeof InstallersIdRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/customer'
     | '/installer'
     | '/survey'
+    | '/api/survey-analyse'
     | '/installers/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/customer'
     | '/installer'
     | '/survey'
+    | '/api/survey-analyse'
     | '/installers/$id'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/customer'
     | '/installer'
     | '/survey'
+    | '/api/survey-analyse'
     | '/installers/$id'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   CustomerRoute: typeof CustomerRoute
   InstallerRoute: typeof InstallerRoute
   SurveyRoute: typeof SurveyRoute
+  ApiSurveyAnalyseRoute: typeof ApiSurveyAnalyseRoute
   InstallersIdRoute: typeof InstallersIdRoute
 }
 
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SurveyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/survey-analyse': {
+      id: '/api/survey-analyse'
+      path: '/api/survey-analyse'
+      fullPath: '/api/survey-analyse'
+      preLoaderRoute: typeof ApiSurveyAnalyseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/installers/$id': {
       id: '/installers/$id'
       path: '/installers/$id'
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   CustomerRoute: CustomerRoute,
   InstallerRoute: InstallerRoute,
   SurveyRoute: SurveyRoute,
+  ApiSurveyAnalyseRoute: ApiSurveyAnalyseRoute,
   InstallersIdRoute: InstallersIdRoute,
 }
 export const routeTree = rootRouteImport

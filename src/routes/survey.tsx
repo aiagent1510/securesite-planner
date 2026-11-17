@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Camera, Check, Upload, Cpu } from "lucide-react";
 import { AppShell, head } from "@/components/AppShell";
+import { fileToSmallJpeg } from "@/lib/shrink-image";
 
 export const Route = createFileRoute("/survey")({
   head: () => head("AI walk-round survey – CopperEye", "Film your property and let AI plan your cameras, recorder and alarm sensors."),
@@ -21,15 +22,26 @@ function Survey() {
   const [files, setFiles] = useState<Record<string, string[]>>({});
   const [analysing, setAnalysing] = useState(false);
   const [done, setDone] = useState<Record<string, boolean>>({});
+  const [advice, setAdvice] = useState<Record<string, string>>({});
+  const [error, setError] = useState("");
   const s = stages[i];
   const finished = i >= stages.length;
 
-  const onFiles = (list: FileList | null) => {
-    if (!list || !s) return;
-    const urls = Array.from(list).map((f) => URL.createObjectURL(f));
-    setFiles((p) => ({ ...p, [s.key]: [...(p[s.key] ?? []), ...urls] }));
+  const onFiles = async (list: FileList | null) => {
+    if (!list?.length || !s) return;
+    setError("");
     setAnalysing(true);
-    setTimeout(() => { setAnalysing(false); setDone((d) => ({ ...d, [s.key]: true })); }, 1800);
+    try {
+      const image = await fileToSmallJpeg(list[list.length - 1]!);
+      setFiles((p) => ({ ...p, [s.key]: [...(p[s.key] ?? []), image] }));
+      const res = await fetch("/api/survey-analyse", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ area: `${s.title} – ${s.prompt}`, image }) });
+      const data = (await res.json()) as { text?: string; error?: string };
+      if (!res.ok || !data.text) throw new Error(data.error ?? "The AI couldn't check this photo.");
+      setAdvice((a) => ({ ...a, [s.key]: data.text! }));
+      setDone((d) => ({ ...d, [s.key]: true }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong.");
+    } finally { setAnalysing(false); }
   };
 
   return (
@@ -50,11 +62,12 @@ function Survey() {
               ) : (
                 <div className="grid h-full place-items-center text-center text-muted-foreground"><div><Camera className="mx-auto mb-2 h-10 w-10 text-primary" />Point your camera here</div></div>
               )}
-              {done[s.key] && <div className="absolute left-[30%] top-[25%] h-8 w-8 animate-pulse rounded-full border-2 border-primary-glow bg-primary/40" />}
+              {false && <div className="absolute left-[30%] top-[25%] h-8 w-8 animate-pulse rounded-full border-2 border-primary-glow bg-primary/40" />}
               {analysing && <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-background/80 p-3 text-sm"><Cpu className="h-4 w-4 text-primary" />AI is checking angles, height and cable route…</div>}
             </div>
 
-            {done[s.key] && <div className="mt-4 rounded-2xl border border-primary/40 bg-accent p-4 text-sm"><span className="font-semibold text-primary">AI plan · </span>{s.tip}</div>}
+            {error && <div className="mt-4 rounded-2xl border border-destructive/50 p-4 text-sm text-destructive">{error}</div>}
+            {done[s.key] && <div className="mt-4 whitespace-pre-line rounded-2xl border border-primary/40 bg-accent p-4 text-sm"><div className="mb-1 font-semibold text-primary">AI plan for this area</div>{advice[s.key] ?? s.tip}</div>}
 
             <div className="mt-5 grid grid-cols-2 gap-3">
               <label className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-copper py-3 font-semibold text-primary-foreground shadow-copper">
