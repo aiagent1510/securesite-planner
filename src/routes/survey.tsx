@@ -39,6 +39,7 @@ function Survey() {
       if (!res.ok || !data.text) throw new Error(data.error ?? "The AI couldn't check this photo.");
       setAdvice((a) => ({ ...a, [s.key]: data.text! }));
       setDone((d) => ({ ...d, [s.key]: true }));
+      setTimeout(() => document.getElementById("ai-plan")?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong.");
     } finally { setAnalysing(false); }
@@ -67,7 +68,7 @@ function Survey() {
             </div>
 
             {error && <div className="mt-4 rounded-2xl border border-destructive/50 p-4 text-sm text-destructive">{error}</div>}
-            {done[s.key] && <div className="mt-4 whitespace-pre-line rounded-2xl border border-primary/40 bg-accent p-4 text-sm"><div className="mb-1 font-semibold text-primary">AI plan for this area</div>{advice[s.key] ?? s.tip}</div>}
+            {done[s.key] && <div id="ai-plan" className="mt-4 whitespace-pre-line rounded-2xl border border-primary/40 bg-accent p-4 text-sm"><div className="mb-1 font-semibold text-primary">AI plan for this area</div>{advice[s.key] ?? s.tip}</div>}
 
             <div className="mt-5 grid grid-cols-2 gap-3">
               <label className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-copper py-3 font-semibold text-primary-foreground shadow-copper">
