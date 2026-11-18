@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1795001917491,
+      "tag": "0000_installer_profiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795001941577,
+      "tag": "0001_installer_photo_access",
+      "breakpoints": true
+    }
+  ]
+}

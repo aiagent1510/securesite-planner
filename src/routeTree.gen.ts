@@ -10,17 +10,28 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CatalogueRouteImport } from './routes/catalogue'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as CustomerRouteImport } from './routes/customer'
-import { Route as InstallerRouteImport } from './routes/installer'
 import { Route as SurveyRouteImport } from './routes/survey'
+import { Route as AuthenticatedInstallerRouteImport } from './routes/_authenticated/installer'
 import { Route as ApiSurveyAnalyseRouteImport } from './routes/api/survey-analyse'
 import { Route as InstallersIdRouteImport } from './routes/installers/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogueRoute = CatalogueRouteImport.update({
@@ -38,15 +49,15 @@ const CustomerRoute = CustomerRouteImport.update({
   path: '/customer',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InstallerRoute = InstallerRouteImport.update({
-  id: '/installer',
-  path: '/installer',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SurveyRoute = SurveyRouteImport.update({
   id: '/survey',
   path: '/survey',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedInstallerRoute = AuthenticatedInstallerRouteImport.update({
+  id: '/installer',
+  path: '/installer',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiSurveyAnalyseRoute = ApiSurveyAnalyseRouteImport.update({
   id: '/api/survey-analyse',
@@ -61,32 +72,36 @@ const InstallersIdRoute = InstallersIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/chat': typeof ChatRoute
   '/customer': typeof CustomerRoute
-  '/installer': typeof InstallerRoute
   '/survey': typeof SurveyRoute
+  '/installer': typeof AuthenticatedInstallerRoute
   '/api/survey-analyse': typeof ApiSurveyAnalyseRoute
   '/installers/$id': typeof InstallersIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/chat': typeof ChatRoute
   '/customer': typeof CustomerRoute
-  '/installer': typeof InstallerRoute
   '/survey': typeof SurveyRoute
+  '/installer': typeof AuthenticatedInstallerRoute
   '/api/survey-analyse': typeof ApiSurveyAnalyseRoute
   '/installers/$id': typeof InstallersIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/chat': typeof ChatRoute
   '/customer': typeof CustomerRoute
-  '/installer': typeof InstallerRoute
   '/survey': typeof SurveyRoute
+  '/_authenticated/installer': typeof AuthenticatedInstallerRoute
   '/api/survey-analyse': typeof ApiSurveyAnalyseRoute
   '/installers/$id': typeof InstallersIdRoute
 }
@@ -94,41 +109,46 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/catalogue'
     | '/chat'
     | '/customer'
-    | '/installer'
     | '/survey'
+    | '/installer'
     | '/api/survey-analyse'
     | '/installers/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/catalogue'
     | '/chat'
     | '/customer'
-    | '/installer'
     | '/survey'
+    | '/installer'
     | '/api/survey-analyse'
     | '/installers/$id'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
     | '/catalogue'
     | '/chat'
     | '/customer'
-    | '/installer'
     | '/survey'
+    | '/_authenticated/installer'
     | '/api/survey-analyse'
     | '/installers/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   CatalogueRoute: typeof CatalogueRoute
   ChatRoute: typeof ChatRoute
   CustomerRoute: typeof CustomerRoute
-  InstallerRoute: typeof InstallerRoute
   SurveyRoute: typeof SurveyRoute
   ApiSurveyAnalyseRoute: typeof ApiSurveyAnalyseRoute
   InstallersIdRoute: typeof InstallersIdRoute
@@ -141,6 +161,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalogue': {
@@ -164,19 +198,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/installer': {
-      id: '/installer'
-      path: '/installer'
-      fullPath: '/installer'
-      preLoaderRoute: typeof InstallerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/survey': {
       id: '/survey'
       path: '/survey'
       fullPath: '/survey'
       preLoaderRoute: typeof SurveyRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/installer': {
+      id: '/_authenticated/installer'
+      path: '/installer'
+      fullPath: '/installer'
+      preLoaderRoute: typeof AuthenticatedInstallerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/survey-analyse': {
       id: '/api/survey-analyse'
@@ -195,12 +229,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedInstallerRoute: typeof AuthenticatedInstallerRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedInstallerRoute: AuthenticatedInstallerRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   CatalogueRoute: CatalogueRoute,
   ChatRoute: ChatRoute,
   CustomerRoute: CustomerRoute,
-  InstallerRoute: InstallerRoute,
   SurveyRoute: SurveyRoute,
   ApiSurveyAnalyseRoute: ApiSurveyAnalyseRoute,
   InstallersIdRoute: InstallersIdRoute,

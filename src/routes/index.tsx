@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ScanLine, Camera, BellRing, ShieldCheck, MessageCircle, Star, ArrowRight } from "lucide-react";
 import hero from "@/assets/hero-cctv.jpg";
 import { AppShell, head } from "@/components/AppShell";
-import { installers } from "@/lib/data";
+import { useQuery } from "@tanstack/react-query";
+import { fetchInstallerCards, initials } from "@/lib/installers";
 
 export const Route = createFileRoute("/")({
   head: () => head("CopperEye – CCTV & alarm quotes without a site visit", "Walk round your home with our AI, get CCTV and alarm quotes from vetted local installers."),
@@ -54,11 +55,11 @@ function Index() {
       <section className="px-5 py-6">
         <div className="mb-4 flex items-end justify-between"><h2 className="text-2xl font-bold">Top installers</h2><span className="text-xs text-muted-foreground">Vetted & insured</span></div>
         <div className="space-y-3">
-          {installers.map((i) => (
-            <Link key={i.id} to="/installers/$id" params={{ id: i.id }} className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 transition hover:border-primary">
-              <div className="grid h-12 w-12 place-items-center rounded-full bg-copper font-bold text-primary-foreground">{i.name.split(" ").map((n) => n[0]).join("")}</div>
-              <div className="flex-1"><div className="font-semibold">{i.company}</div><div className="text-xs text-muted-foreground">{i.area} · {i.years} yrs</div></div>
-              <div className="flex items-center gap-1 text-sm font-semibold"><Star className="h-4 w-4 fill-primary text-primary" />{i.rating}</div>
+          {(installers ?? []).map((i) => (
+            <Link key={i.id} to="/installers/$id" params={{ id: i.slug }} className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 transition hover:border-primary">
+              {i.avatar ? <img src={i.avatar} alt={i.name} className="h-12 w-12 rounded-full object-cover" /> : <div className="grid h-12 w-12 place-items-center rounded-full bg-copper font-bold text-primary-foreground">{initials(i.name)}</div>}
+              <div className="flex-1"><div className="font-semibold">{i.company}</div><div className="text-xs text-muted-foreground">{i.area} · {i.years_in_trade} yrs</div></div>
+              <div className="flex items-center gap-1 text-sm font-semibold"><Star className="h-4 w-4 fill-primary text-primary" />{i.rating || "New"}</div>
             </Link>
           ))}
         </div>
